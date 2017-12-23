@@ -6,7 +6,11 @@
 #define PIN 6
 #define LED_COUNT 200
 
-#define MAX 127
+#define MAX 192
+#define LONG_WAIT 180000
+#define SHORT_WAIT 30000
+#define LONG_TRANS 20000
+#define SHORT_TRANS 5000
 
 // Parameter 1 = number of pixels in strip
 // Parameter 2 = Arduino pin number (most are valid)
@@ -74,74 +78,74 @@ void setup() {
 }
 
 void loop() {
-  // Some example procedures showing how to display to the pixels:
+  // uncomment to gather led positions (manual process):
   // initialize(strip.Color(255,255,255));
   // initialize(strip.Color(255,255,255));
   // initialize(strip.Color(255,255,255));
   // getLocations(strip.Color(255, 255, 255));
   
-//    solid(strip.Color(255,0,0));
-//    delay(3000);
-//
-//    solid(strip.Color(0,255,0));
-//    delay(3000);
-//
-//    dissolve(strip.Color(255,0,0),strip.Color(0,255,0),10000);
-//    delay(3000);
 
-    // Serial.println("Solid");
-    // solid(strip.Color(255,0,0));
-    // delay(3000);
+     Serial.println("Solid");
+     solid(red);
+     delay(SHORT_WAIT);
+
+     Serial.println("Dissolve Even");
+     dissolveFromEven(red, green,SHORT_TRANS);
+     delay(LONG_WAIT);
+
+     Serial.println("Dissolve");
+     dissolveToOdd(green,SHORT_TRANS);
+     delay(SHORT_WAIT);
     
-    // Serial.println("Solid2");
-    two_solid(yellow,cyan); 
-    // delay(3000);
+////     Serial.println("Solid2");
+////     two_solid(red,green); 
+////     delay(10000);
+////    
+////     Serial.println("Dissolve");
+////     dissolve(red, green,10000);
+////     delay(3000);
     
-    Serial.println("Dissolve");
-    dissolve(green, yellow,5000);
-    delay(3000);
+     Serial.println("Fade");
+     fade(green, blue,LONG_TRANS);
+     delay(SHORT_WAIT);
     
-    Serial.println("Fade");
-    fade(black, green,5000);
-    delay(3000);
+////     Serial.println("HorizWipe");
+////     horizWipe(false,strip.Color(0,255,255),strip.Color(0,0,255),5000);
+////     delay(3000);
+////    
+////     Serial.println("centerHorizWipe");
+////     centerHorizWipe(strip.Color(0,255,0),strip.Color(255,0,0),5000);
+////     delay(3000);
+////    
+////     Serial.println("vertWipe");
+////     vertWipe(false,strip.Color(255,0,0),strip.Color(0,0,255),5000);
+////     delay(3000);
+////        
+////     Serial.println("vertLine");
+////     vertLine(false,strip.Color(0,255,0),strip.Color(255,0,0),5000);
+////     delay(3000);
     
-    // Serial.println("HorizWipe");
-    // horizWipe(false,strip.Color(0,255,255),strip.Color(0,0,255),5000);
-    // delay(3000);
+     Serial.println("vertWave");
+     vertWave(green,blue,1000,LONG_TRANS);
+     delay(SHORT_WAIT);
     
-    // Serial.println("centerHorizWipe");
-    // centerHorizWipe(strip.Color(0,255,0),strip.Color(255,0,0),5000);
-    // delay(3000);
+////     Serial.println("vertCenterWave");
+////     vertCenterWave(strip.Color(255,255,0),strip.Color(0,255,255),150,5000); 
+////     delay(3000);
     
-    // Serial.println("vertWipe");
-    // vertWipe(false,strip.Color(255,0,0),strip.Color(0,0,255),5000);
-    // delay(3000);
-        
-    // Serial.println("vertLine");
-    // vertLine(false,strip.Color(0,255,0),strip.Color(255,0,0),5000);
-    // delay(3000);
+     Serial.println("transition");
+     transition(blue, green);
+     delay(SHORT_WAIT);
     
-    // Serial.println("vertWave");
-    // vertWave(strip.Color(0,255,0),strip.Color(255,0,0),150,5000);
-    // delay(3000);
-    
-    // Serial.println("vertCenterWave");
-    // vertCenterWave(strip.Color(255,255,0),strip.Color(0,255,255),150,5000); 
-    // delay(3000);
-    
-    Serial.println("transition");
-    transition(white, blue); 
-    transition(blue, red); 
-    delay(3000);
-    
-    // Serial.println("setBlock");
-    // setBlock(3,strip.Color(255,255,255));
-    // delay(3000);
+////     Serial.println("setBlock");
+////     setBlock(3,strip.Color(255,255,255));
+////     delay(3000);
     
     Serial.println("Shimmer");
-    shimmer(green, yellow,20000,25);
-    transition(green, yellow);
-    shimmer(yellow, red,20000,25);
+    shimmer(red, green,LONG_TRANS,25);
+    fade(red, green, SHORT_TRANS);
+    shimmer(green, red,LONG_TRANS,25);
+    fade(green, red, SHORT_TRANS);
 
 }
 
@@ -224,6 +228,89 @@ void dissolve(uint32_t c_from, uint32_t c_to, uint32_t duration)
    strip.show();
       
 } //dissolve
+
+
+/*******************************************************/
+void dissolveToOdd(uint32_t c_to, uint32_t duration)
+{
+   uint32_t elapsed_time = 0;
+   uint32_t tick = duration/(strip.numPixels()/2+50);
+   bool temp[strip.numPixels()];
+   int  rand;
+
+   for(uint16_t j=0; j< strip.numPixels(); j++){
+    if(j%2 == 0) temp[j] = true;
+    break;
+    temp[j] = false;
+   }
+
+   
+   while (elapsed_time < duration)
+   {
+     rand = random(strip.numPixels() /2) *2 +1;
+     if (temp[rand])
+     { rand = random(strip.numPixels() /2 ) *2 +1;
+       if (temp[rand])
+       {
+         for(uint16_t i=1; i<strip.numPixels(); i+=2)
+         { if (!temp[i]) {rand=i; break;} }
+       }
+     }
+     temp[rand] = true;
+     strip.setPixelColor(rand,c_to);
+     strip.show();     
+     delay(tick); 
+     
+     elapsed_time += tick+5;     
+   }
+   
+   for(uint16_t j=0; j<strip.numPixels(); j++){ 
+    strip.setPixelColor(j,c_to);
+    strip.show();
+    delay(tick);
+   }
+      
+} //dissolve
+
+
+/*******************************************************/
+void dissolveFromEven(uint32_t c_from, uint32_t c_to, uint32_t duration)
+{
+   uint32_t elapsed_time = 0;
+   uint32_t tick = duration/(strip.numPixels()/2+50);
+   bool temp[strip.numPixels()];
+   int  rand;
+   
+   for(uint16_t j=0; j<strip.numPixels(); j++)
+   { temp[j] = false;
+     strip.setPixelColor(j,c_from);
+   }
+   
+   while (elapsed_time < duration)
+   {
+     rand = random(strip.numPixels() /2 ) * 2;
+     if (temp[rand])
+     { rand = random(strip.numPixels() /2 ) * 2;
+       if (temp[rand])
+       {
+         for(uint16_t i=0; i<strip.numPixels(); i+=2)
+         { if (!temp[i]) {rand=i; break;} }
+       }
+     }
+     temp[rand] = true;
+     strip.setPixelColor(rand,c_to);
+     strip.show();     
+     delay(tick); 
+     
+     elapsed_time += tick+5;     
+   }
+   
+//   for(uint16_t j=0; j<strip.numPixels(); j++)
+//   { strip.setPixelColor(j,c_to);}
+//   strip.show();
+      
+} //dissolve
+
 /*******************************************************/
 // Transition all lights from color c_from to color c_to
 void fade(uint32_t c_from, uint32_t c_to, uint32_t duration)
