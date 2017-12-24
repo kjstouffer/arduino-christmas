@@ -94,12 +94,25 @@ void loop() {
      Serial.println("Solid");
      solid(red);
      delay(SHORT_WAIT);
-
-     Serial.println("Dissolve Even");
+     firstHalfDissolve(silver,SHORT_TRANS);
+     delay(SHORT_WAIT);
+     secondHalfDissolve(green,SHORT_TRANS);
+     firstHalfDissolve(red,SHORT_TRANS);
+     delay(SHORT_WAIT);
+     secondHalfDissolve(green,SHORT_TRANS);
+     delay(SHORT_WAIT);
+     firstHalfDissolve(silver,SHORT_TRANS);
+     delay(SHORT_WAIT);
+     secondHalfDissolve(red,SHORT_TRANS);
+     delay(SHORT_WAIT);
+     firstHalfDissolve(silver,SHORT_TRANS);
+     secondHalfDissolve(green,SHORT_TRANS);
+     firstHalfDissolve(blue,SHORT_TRANS);
+     delay(SHORT_WAIT);
+     secondHalfDissolve(green,SHORT_TRANS);
+     firstHalfDissolve(silver,SHORT_TRANS);
+     secondHalfDissolve(red,SHORT_TRANS);
      firstHalfDissolve(green,SHORT_TRANS);
-     delay(LONG_WAIT);
-
-     Serial.println("Dissolve");
      secondHalfDissolve(green,SHORT_TRANS);
      delay(SHORT_WAIT);
     
@@ -143,6 +156,7 @@ void loop() {
      transition(blue, green);
      delay(SHORT_WAIT);
 
+     Serial.println("fade");
      fadeFromExisting(red, LONG_TRANS);
      delay(SHORT_WAIT);
     
@@ -152,9 +166,9 @@ void loop() {
     
     Serial.println("Shimmer");
     shimmer(red, green,LONG_TRANS,25);
-    fade(red, green, SHORT_TRANS);
+    fadeFromExisting(green, SHORT_TRANS);
     shimmer(green, red,LONG_TRANS,25);
-    fade(green, red, SHORT_TRANS);
+    fadeFromExisting(red, SHORT_TRANS);
 
 }
 
