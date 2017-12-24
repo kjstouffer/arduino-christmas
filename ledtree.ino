@@ -11,6 +11,11 @@
 #define SHORT_WAIT 30000
 #define LONG_TRANS 20000
 #define SHORT_TRANS 5000
+//
+//#define LONG_WAIT 18000
+//#define SHORT_WAIT 3000
+//#define LONG_TRANS 2000
+//#define SHORT_TRANS 500
 
 // Parameter 1 = number of pixels in strip
 // Parameter 2 = Arduino pin number (most are valid)
@@ -42,6 +47,7 @@ uint32_t yellow = strip.Color(MAX,MAX,0);
 uint32_t magenta = strip.Color(MAX,0,MAX);
 uint32_t white = strip.Color(MAX,MAX,MAX);
 uint32_t black = strip.Color(0,0,0);
+uint32_t silver = strip.Color(MAX-40,MAX-40,MAX-20);
 
 //Define the X,Y positions of each pixel.  The first array element is the X 
 //coordinate of the first LED in the string, the second array element is the
@@ -90,11 +96,11 @@ void loop() {
      delay(SHORT_WAIT);
 
      Serial.println("Dissolve Even");
-     dissolveFromEven(red, green,SHORT_TRANS);
+     firstHalfDissolve(green,SHORT_TRANS);
      delay(LONG_WAIT);
 
      Serial.println("Dissolve");
-     dissolveToOdd(green,SHORT_TRANS);
+     secondHalfDissolve(green,SHORT_TRANS);
      delay(SHORT_WAIT);
     
 ////     Serial.println("Solid2");
@@ -230,30 +236,87 @@ void dissolve(uint32_t c_from, uint32_t c_to, uint32_t duration)
 } //dissolve
 
 
+
 /*******************************************************/
-void dissolveToOdd(uint32_t c_to, uint32_t duration)
+void firstHalfDissolve(uint32_t c_to, uint32_t duration)
 {
    uint32_t elapsed_time = 0;
-   uint32_t tick = duration/(strip.numPixels()/2+50);
+   uint32_t tick = duration/(strip.numPixels()/2);
+   bool temp[strip.numPixels()];
+   int  rand;
+   
+   
+   for(uint16_t j=0; j< strip.numPixels(); j++){
+      if(j%2 == 1){
+        temp[j] = true;
+      }else{
+        temp[j] = false;    
+      }    
+   }
+   
+   while (elapsed_time < duration)
+   {
+     rand = abs(random(strip.numPixels() /2 ) * 2);
+     if (temp[rand]){ 
+       rand = abs(random(strip.numPixels() /2 ) * 2);
+       if (temp[rand]){
+         for(uint16_t i=0; i<strip.numPixels(); i+=2){
+            if (!temp[i]) {
+              rand=i; 
+              break;
+            } 
+         }
+       }
+     }
+     temp[rand] = true;
+     strip.setPixelColor(rand,c_to);
+     strip.show();     
+     delay(tick); 
+     
+     elapsed_time += tick;
+   }
+   
+
+  for(uint16_t j=0; j<strip.numPixels(); j++){
+    if(temp[j] == false){
+      strip.setPixelColor(j,c_to);
+      temp[j] = true;
+      strip.show();
+      delay(tick); 
+    }
+  }
+      
+} //dissolve
+
+/*******************************************************/
+void secondHalfDissolve(uint32_t c_to, uint32_t duration)
+{
+   uint32_t elapsed_time = 0;
+   uint32_t tick = duration/(strip.numPixels()/2);
    bool temp[strip.numPixels()];
    int  rand;
 
    for(uint16_t j=0; j< strip.numPixels(); j++){
-    if(j%2 == 0) temp[j] = true;
-    break;
-    temp[j] = false;
+      if(j%2 == 0){
+        temp[j] = true;
+      }else{
+        temp[j] = false;    
+      }    
    }
 
    
    while (elapsed_time < duration)
    {
-     rand = random(strip.numPixels() /2) *2 +1;
-     if (temp[rand])
-     { rand = random(strip.numPixels() /2 ) *2 +1;
-       if (temp[rand])
-       {
-         for(uint16_t i=1; i<strip.numPixels(); i+=2)
-         { if (!temp[i]) {rand=i; break;} }
+     rand = abs(random(strip.numPixels() /2 ) * 2) +1;
+     if (temp[rand]){ 
+       rand = abs(random(strip.numPixels() /2 ) * 2) +1;
+       if (temp[rand]){
+         for(uint16_t i=1; i<strip.numPixels(); i+=2){
+            if (!temp[i]) {
+              rand=i; 
+              break;
+            } 
+         }
        }
      }
      temp[rand] = true;
@@ -261,53 +324,17 @@ void dissolveToOdd(uint32_t c_to, uint32_t duration)
      strip.show();     
      delay(tick); 
      
-     elapsed_time += tick+5;     
+     elapsed_time += tick;
    }
    
-   for(uint16_t j=0; j<strip.numPixels(); j++){ 
-    strip.setPixelColor(j,c_to);
-    strip.show();
-    delay(tick);
-   }
-      
-} //dissolve
-
-
-/*******************************************************/
-void dissolveFromEven(uint32_t c_from, uint32_t c_to, uint32_t duration)
-{
-   uint32_t elapsed_time = 0;
-   uint32_t tick = duration/(strip.numPixels()/2+50);
-   bool temp[strip.numPixels()];
-   int  rand;
-   
-   for(uint16_t j=0; j<strip.numPixels(); j++)
-   { temp[j] = false;
-     strip.setPixelColor(j,c_from);
-   }
-   
-   while (elapsed_time < duration)
-   {
-     rand = random(strip.numPixels() /2 ) * 2;
-     if (temp[rand])
-     { rand = random(strip.numPixels() /2 ) * 2;
-       if (temp[rand])
-       {
-         for(uint16_t i=0; i<strip.numPixels(); i+=2)
-         { if (!temp[i]) {rand=i; break;} }
-       }
-     }
-     temp[rand] = true;
-     strip.setPixelColor(rand,c_to);
-     strip.show();     
-     delay(tick); 
-     
-     elapsed_time += tick+5;     
-   }
-   
-//   for(uint16_t j=0; j<strip.numPixels(); j++)
-//   { strip.setPixelColor(j,c_to);}
-//   strip.show();
+  for(uint16_t j=0; j<strip.numPixels(); j++){
+    if(temp[j] == false){
+      strip.setPixelColor(j,c_to);
+      temp[j] = true;
+      strip.show();
+      delay(tick); 
+    }
+  }
       
 } //dissolve
 
