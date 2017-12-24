@@ -142,6 +142,9 @@ void loop() {
      Serial.println("transition");
      transition(blue, green);
      delay(SHORT_WAIT);
+
+     fadeFromExisting(red, LONG_TRANS);
+     delay(SHORT_WAIT);
     
 ////     Serial.println("setBlock");
 ////     setBlock(3,strip.Color(255,255,255));
@@ -352,6 +355,33 @@ void fade(uint32_t c_from, uint32_t c_to, uint32_t duration)
 
      for(uint16_t i=0; i<strip.numPixels(); i++)
      { strip.setPixelColor(i,temp_color); }
+     
+     strip.show();     
+     delay(50); 
+     elapsed_time += 55;
+     
+   }
+   for(uint16_t i=0; i<strip.numPixels(); i++)
+     { strip.setPixelColor(i,c_to); }
+   strip.show();
+      
+} //fade
+/***********************************************************/
+// Transition all lights from existing color to color c_to
+void fadeFromExisting(uint32_t c_to, uint32_t duration)
+{
+   uint32_t elapsed_time = 0;
+   uint32_t temp_color;
+   
+ 
+   while (elapsed_time < duration) 
+   {
+     
+
+     for(uint16_t i=0; i<strip.numPixels(); i++){
+        temp_color = colorSlope(strip.getPixelColor(i),c_to,float(elapsed_time)/float(duration));
+        strip.setPixelColor(i,temp_color); 
+     }
      
      strip.show();     
      delay(50); 
