@@ -7,7 +7,8 @@
 #define LED_COUNT 200
 
 #define MAX 255
-#define BRIGHTNESS 96
+#define BRIGHTNESS 80
+
 #define LONG_WAIT 180000
 #define SHORT_WAIT 30000
 #define LONG_TRANS 20000
