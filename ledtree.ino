@@ -6,7 +6,8 @@
 #define PIN 6
 #define LED_COUNT 200
 
-#define MAX 192
+#define MAX 255
+#define BRIGHTNESS 96
 #define LONG_WAIT 180000
 #define SHORT_WAIT 30000
 #define LONG_TRANS 20000
@@ -47,7 +48,7 @@ uint32_t yellow = strip.Color(MAX,MAX,0);
 uint32_t magenta = strip.Color(MAX,0,MAX);
 uint32_t white = strip.Color(MAX,MAX,MAX);
 uint32_t black = strip.Color(0,0,0);
-uint32_t silver = strip.Color(MAX-40,MAX-40,MAX-20);
+uint32_t silver = strip.Color(MAX-10,MAX-10,MAX);
 
 //Define the X,Y positions of each pixel.  The first array element is the X 
 //coordinate of the first LED in the string, the second array element is the
@@ -80,6 +81,7 @@ byte Positions[LED_COUNT*2] =
 
 void setup() {
   strip.begin();
+  strip.setBrightness(BRIGHTNESS);
   strip.show(); // Initialize all pixels to 'off'
 }
 
