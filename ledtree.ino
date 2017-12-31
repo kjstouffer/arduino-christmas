@@ -81,6 +81,8 @@ byte Positions[LED_COUNT*2] =
 
 
 void setup() {
+  Serial.begin(9600);
+  Serial.println("<Arduino is ready>");
   strip.begin();
   strip.setBrightness(BRIGHTNESS);
   strip.show(); // Initialize all pixels to 'off'
@@ -97,10 +99,14 @@ void loop() {
      Serial.println("Solid");
      solid(red);
      delay(SHORT_WAIT);
+     Serial.println("Dissolving First Half");
      firstHalfDissolve(silver,SHORT_TRANS);
      delay(SHORT_WAIT);
+     Serial.println("Dissolving Second Half");
      secondHalfDissolve(green,SHORT_TRANS);
+     Serial.println("Dissolving First Half");
      firstHalfDissolve(red,SHORT_TRANS);
+     Serial.println("waiting for next");
      delay(SHORT_WAIT);
      secondHalfDissolve(green,SHORT_TRANS);
      delay(SHORT_WAIT);
