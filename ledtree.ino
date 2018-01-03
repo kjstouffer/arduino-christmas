@@ -9,15 +9,15 @@
 #define MAX 255
 #define BRIGHTNESS 80
 
-//#define LONG_WAIT 180000
-//#define SHORT_WAIT 30000
-//#define LONG_TRANS 20000
-//#define SHORT_TRANS 5000
-//
-#define LONG_WAIT 18000
-#define SHORT_WAIT 3000
-#define LONG_TRANS 10000
+#define LONG_WAIT 180000
+#define SHORT_WAIT 30000
+#define LONG_TRANS 20000
 #define SHORT_TRANS 5000
+//
+//#define LONG_WAIT 18000
+//#define SHORT_WAIT 3000
+//#define LONG_TRANS 10000
+//#define SHORT_TRANS 5000
 
 // Parameter 1 = number of pixels in strip
 // Parameter 2 = Arduino pin number (most are valid)
