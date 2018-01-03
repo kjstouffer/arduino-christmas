@@ -89,13 +89,13 @@ void setup() {
 }
 
 void loop() {
-    //defaultLoop();
-    testLoop();
+    defaultLoop();
+    //testLoop();
 }
 
 void testLoop() {
      Serial.println("verticalTransitionWave");
-     verticalTransitionWave(blue, green, 40000);
+     verticalTransitionWave(blue, green, 25, 40000);
      delay(SHORT_WAIT);
      solid(red);
      delay(SHORT_WAIT);
@@ -168,6 +168,10 @@ void defaultLoop() {
     
      Serial.println("vertWave");
      vertWave(green,blue,1000,LONG_TRANS);
+     delay(SHORT_WAIT);
+     
+     Serial.println("verticalTransitionWave");
+     verticalTransitionWave(blue,green,100,LONG_TRANS);
      delay(SHORT_WAIT);
     
 ////     Serial.println("vertCenterWave");
@@ -446,7 +450,7 @@ void transition(uint32_t c_top, uint32_t c_bottom)
 } //Transition of colors
 /***********************************************************/
 // verticalTransitionWave of colors
-void verticalTransitionWave(uint32_t c_top, uint32_t c_bottom, uint32_t duration)
+void verticalTransitionWave(uint32_t c_top, uint32_t c_bottom, uint32_t tick, uint32_t duration)
 {
     uint32_t elapsed_time = 0;
     uint32_t temp_color;
@@ -465,8 +469,8 @@ void verticalTransitionWave(uint32_t c_top, uint32_t c_bottom, uint32_t duration
         }
         offset += 1 ;
         strip.show();     
-        delay(100); 
-        elapsed_time += 55;     
+        delay(tick); 
+        elapsed_time += tick + 5;     
     }      
 } //verticalTransitionWave of colors
 /***********************************************************/
