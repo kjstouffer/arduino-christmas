@@ -9,15 +9,15 @@
 #define MAX 255
 #define BRIGHTNESS 80
 
-#define LONG_WAIT 180000
-#define SHORT_WAIT 30000
-#define LONG_TRANS 20000
-#define SHORT_TRANS 5000
+//#define LONG_WAIT 180000
+//#define SHORT_WAIT 30000
+//#define LONG_TRANS 20000
+//#define SHORT_TRANS 5000
 //
-//#define LONG_WAIT 18000
-//#define SHORT_WAIT 3000
-//#define LONG_TRANS 2000
-//#define SHORT_TRANS 500
+#define LONG_WAIT 18000
+#define SHORT_WAIT 3000
+#define LONG_TRANS 10000
+#define SHORT_TRANS 5000
 
 // Parameter 1 = number of pixels in strip
 // Parameter 2 = Arduino pin number (most are valid)
@@ -89,6 +89,19 @@ void setup() {
 }
 
 void loop() {
+    //defaultLoop();
+    testLoop();
+}
+
+void testLoop() {
+     Serial.println("verticalTransitionWave");
+     verticalTransitionWave(blue, green, 40000);
+     delay(SHORT_WAIT);
+     solid(red);
+     delay(SHORT_WAIT);
+}
+
+void defaultLoop() {
   // uncomment to gather led positions (manual process):
   // initialize(strip.Color(255,255,255));
   // initialize(strip.Color(255,255,255));
@@ -160,7 +173,7 @@ void loop() {
 ////     Serial.println("vertCenterWave");
 ////     vertCenterWave(strip.Color(255,255,0),strip.Color(0,255,255),150,5000); 
 ////     delay(3000);
-    
+
      Serial.println("transition");
      transition(blue, green);
      delay(SHORT_WAIT);
@@ -424,13 +437,41 @@ void transition(uint32_t c_top, uint32_t c_bottom)
    uint32_t temp_color;
    
    for(uint16_t i=0; i<strip.numPixels(); i++)
-     { temp_color = colorSlope(c_top,c_bottom,float(Positions[i*2+1])/float(MAX_Y));        
+     { temp_color = colorSlope(c_top,c_bottom,float(Positions[i*2+1])/float(MAX_Y/2));        
        strip.setPixelColor(i,temp_color); }
      
    strip.show();     
    delay(50); 
       
 } //Transition of colors
+/***********************************************************/
+// verticalTransitionWave of colors
+void verticalTransitionWave(uint32_t c_top, uint32_t c_bottom, uint32_t duration)
+{
+    uint32_t elapsed_time = 0;
+    uint32_t temp_color;
+    float offset = 0;
+    while (elapsed_time < duration)
+    {
+        for(uint16_t i=0; i<strip.numPixels(); i++){ 
+            //if(offset > MAX_Y) offset = MAX_Y - offset;
+            float y_coord = float(Positions[i*2+1]);
+            if(y_coord > MAX_Y/2){
+                y_coord = MAX_Y - y_coord + offset;
+            }
+            else {
+                y_coord = y_coord + offset;
+            } 
+            float percent = y_coord/float(MAX_Y/2);
+            temp_color = colorSlope(c_top, c_bottom, percent);        
+            strip.setPixelColor(i,temp_color);
+        }
+        offset +=1 ;
+        strip.show();     
+        delay(100); 
+        elapsed_time += 55;     
+    }      
+} //verticalTransitionWave of colors
 /***********************************************************/
 // Horiz Wipe from color c_from to color c_to
 void horizWipe(boolean left_to_right, uint32_t c_wipe, uint32_t c_orig, uint32_t duration)
@@ -542,51 +583,6 @@ void vertLine(boolean bottom_to_top, uint32_t c_wipe, uint32_t c_orig, uint32_t 
      elapsed_time += 55;     
    }
 } //vertWipe
-/*******************************************************/
-// Lights up each light in the strip one-by-one, used to
-// define pixel positions
-void getLocation(uint32_t loc) {
-  uint32_t signal = loc;
-  
-  for(uint16_t i=0; i<strip.numPixels();i++) {
-    strip.setPixelColor(i,strip.Color(0,0,0)); 
-  }
-  
-  while(signal > 0)
-  {
-    
-    if (signal >= 10)
-    { for(uint16_t i=0; i< 10; i++)
-      {strip.setPixelColor(loc*10+i,strip.Color(255,0,0));}
-      signal -= 10;
-    }
-    else
-    { for(uint16_t i=0; i< 10; i++)
-      {strip.setPixelColor(loc*10+i,strip.Color(255,255,255));}
-      signal -= 1;
-    }
-  
-    strip.show();
-    delay(500);
-    for(uint16_t i=0; i<strip.numPixels();i++) {
-      strip.setPixelColor(i,strip.Color(0,0,0)); 
-    }
-    strip.show();
-    delay(500); 
-  } //while on signal
-  
-  for(uint16_t i=0; i < 10; i++)
-  {
-    strip.setPixelColor(loc*10+i,strip.Color(255,255,255));
-    strip.show();
-    delay(1000);
-    strip.setPixelColor(loc*10+i,strip.Color(0,0,0));
-    
-    
-    
-  }
-  
-} //setupWipe()
 /********************************************************/
 void vertWave(uint32_t c1, uint32_t c2, uint32_t tick, uint32_t duration)
 {
