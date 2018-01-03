@@ -454,8 +454,12 @@ void verticalTransitionWave(uint32_t c_top, uint32_t c_bottom, uint32_t duration
     while (elapsed_time < duration)
     {
         for(uint16_t i=0; i<strip.numPixels(); i++){ 
+            if(offset > MAX_Y) offset = 0;
             float y_coord = float(Positions[i*2+1]) - offset;
-           	float percent = y_coord/float(MAX_Y/2);
+           	float percent = abs(y_coord/float(MAX_Y/2));
+            if(percent > 1) {
+                percent = 1 - percent;
+            }
             temp_color = colorSlope(c_bottom, c_top, percent);        
             strip.setPixelColor(i,temp_color);
         }
