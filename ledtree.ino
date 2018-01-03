@@ -38,8 +38,8 @@ Adafruit_NeoPixel strip = Adafruit_NeoPixel(LED_COUNT, PIN, NEO_RGB + NEO_KHZ800
 //This is used to derive where the middle of the tree is in the X and Y direction.
 //For example if MAX_X = 20, then LEDs at a position of 10 would be the middle of
 //the tree.
-#define MAX_X 35
-#define MAX_Y 55
+#define MAX_X 36
+#define MAX_Y 56
 
 uint32_t red = strip.Color(MAX,0,0);
 uint32_t green = strip.Color(0,MAX,0);
@@ -454,19 +454,12 @@ void verticalTransitionWave(uint32_t c_top, uint32_t c_bottom, uint32_t duration
     while (elapsed_time < duration)
     {
         for(uint16_t i=0; i<strip.numPixels(); i++){ 
-            //if(offset > MAX_Y) offset = MAX_Y - offset;
-            float y_coord = float(Positions[i*2+1]);
-            if(y_coord > MAX_Y/2){
-                y_coord = MAX_Y - y_coord + offset;
-            }
-            else {
-                y_coord = y_coord + offset;
-            } 
-            float percent = y_coord/float(MAX_Y/2);
-            temp_color = colorSlope(c_top, c_bottom, percent);        
+            float y_coord = float(Positions[i*2+1]) - offset;
+           	float percent = y_coord/float(MAX_Y/2);
+            temp_color = colorSlope(c_bottom, c_top, percent);        
             strip.setPixelColor(i,temp_color);
         }
-        offset +=1 ;
+        offset += 1 ;
         strip.show();     
         delay(100); 
         elapsed_time += 55;     
