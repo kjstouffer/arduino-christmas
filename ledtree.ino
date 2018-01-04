@@ -60,7 +60,7 @@ byte Positions[LED_COUNT*2] =
 15,1,   15,2,   14,3,   14,4,   14,4,   15,4,   16,5,   20,9,   17,11,  19,14,  // 0 - 9
 16,18,  16,18,  24,17,  25,16,  25,16,  27,13,  30,11,  31,12,  31,12,  31,12,  //10 - 19
 28,11,  30,8,   28,9,   28,14,  28,14,  27,14,  30,10,  28,8,   20,8,   22,6,   //20 - 29
-18,7,   18,6,   26,8,   24,9,   19,14,  24,14,  24,1,   27,14,  27,14,  29,15,  //30 - 39
+18,7,   18,6,   26,8,   24,9,   19,14,  24,14,  24,14,  27,14,  27,14,  29,15,  //30 - 39
 29,16,  30,16,  31,17,  26,17,  26,18,  26,20,  24,21,  24,22,  22,22,  24,22,  //40 - 49
 26,29,  26,24,  24,24,  28,26,  26,26,  25,26,  24,24,  24,21,  24,21,  23,18,  //50 - 59
 26,21,  21,18,  18,18,  20,24,  16,27,  18,26,  16,29,  21,28,  27,29,  27,26,  //60 - 69
@@ -91,22 +91,24 @@ void setup() {
 void loop() {
     defaultLoop();
     //testLoop();
+    //initLoop();
 }
 
+void initLoop(){
+    // uncomment to gather led positions (manual process):
+    initialize(strip.Color(255,255,255));
+    initialize(strip.Color(255,255,255));
+    initialize(strip.Color(255,255,255));
+    getLocations(strip.Color(255, 255, 255));
+}
 void testLoop() {
      Serial.println("verticalTransitionWave");
-     verticalTransitionWave(blue, green, 25, 40000);
-     delay(SHORT_WAIT);
-     solid(red);
-     delay(SHORT_WAIT);
+     verticalTransitionWave(blue, green, 100, 20000);
+     //verticalTransitionWave(red, green, 10, 20000);
+     //verticalTransitionWave(red, blue, 1000, 20000);
 }
 
 void defaultLoop() {
-  // uncomment to gather led positions (manual process):
-  // initialize(strip.Color(255,255,255));
-  // initialize(strip.Color(255,255,255));
-  // initialize(strip.Color(255,255,255));
-  // getLocations(strip.Color(255, 255, 255));
   
 
      Serial.println("Solid");
@@ -166,21 +168,22 @@ void defaultLoop() {
 ////     vertLine(false,strip.Color(0,255,0),strip.Color(255,0,0),5000);
 ////     delay(3000);
     
-     Serial.println("vertWave");
-     vertWave(green,blue,1000,LONG_TRANS);
+     Serial.println("transition");
+     transition(blue, green);
      delay(SHORT_WAIT);
+
+     Serial.println("vertWave");
+     vertWave(green,blue,1000,2*LONG_TRANS);
      
      Serial.println("verticalTransitionWave");
-     verticalTransitionWave(blue,green,100,LONG_TRANS);
-     delay(SHORT_WAIT);
+     verticalTransitionWave(blue,green,100,2*LONG_TRANS);
+     
+     Serial.println("verticalTransitionWave");
+     verticalTransitionWave(red,green,100,2*LONG_TRANS);
     
 ////     Serial.println("vertCenterWave");
 ////     vertCenterWave(strip.Color(255,255,0),strip.Color(0,255,255),150,5000); 
 ////     delay(3000);
-
-     Serial.println("transition");
-     transition(blue, green);
-     delay(SHORT_WAIT);
 
      Serial.println("fade");
      fadeFromExisting(red, LONG_TRANS);
@@ -191,10 +194,10 @@ void defaultLoop() {
 ////     delay(3000);
     
     Serial.println("Shimmer");
-    shimmer(red, green,LONG_TRANS,25);
-    fadeFromExisting(green, SHORT_TRANS);
-    shimmer(green, red,LONG_TRANS,25);
-    fadeFromExisting(red, SHORT_TRANS);
+    shimmer(red, green,2*LONG_TRANS,25);
+    fadeFromExisting(green, 2*SHORT_TRANS);
+    shimmer(green, red,2*LONG_TRANS,25);
+    fadeFromExisting(red, 2*SHORT_TRANS);
 
 }
 
