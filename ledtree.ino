@@ -11,6 +11,7 @@
 
 #define LONG_WAIT 180000
 #define SHORT_WAIT 30000
+#define EXTRA_LONG_TRANS 60000
 #define LONG_TRANS 20000
 #define SHORT_TRANS 5000
 //
@@ -171,15 +172,12 @@ void defaultLoop() {
      Serial.println("transition");
      transition(blue, green);
      delay(SHORT_WAIT);
-
-     Serial.println("vertWave");
-     vertWave(green,blue,1000,2*LONG_TRANS);
      
      Serial.println("verticalTransitionWave");
-     verticalTransitionWave(blue,green,100,2*LONG_TRANS);
+     verticalTransitionWave(blue,green,100,EXTRA_LONG_TRANS);
      
      Serial.println("verticalTransitionWave");
-     verticalTransitionWave(red,green,100,2*LONG_TRANS);
+     verticalTransitionWave(red,green,100,EXTRA_LONG_TRANS);
     
 ////     Serial.println("vertCenterWave");
 ////     vertCenterWave(strip.Color(255,255,0),strip.Color(0,255,255),150,5000); 
@@ -194,10 +192,10 @@ void defaultLoop() {
 ////     delay(3000);
     
     Serial.println("Shimmer");
-    shimmer(red, green,2*LONG_TRANS,25);
-    fadeFromExisting(green, 2*SHORT_TRANS);
-    shimmer(green, red,2*LONG_TRANS,25);
-    fadeFromExisting(red, 2*SHORT_TRANS);
+    shimmer(red, green,EXTRA_LONG_TRANS,25);
+    fadeFromExisting(green, LONG_TRANS);
+    shimmer(green, red,EXTRA_LONG_TRANS,25);
+    fadeFromExisting(red, LONG_TRANS);
 
 }
 
@@ -444,7 +442,7 @@ void transition(uint32_t c_top, uint32_t c_bottom)
    uint32_t temp_color;
    
    for(uint16_t i=0; i<strip.numPixels(); i++)
-     { temp_color = colorSlope(c_top,c_bottom,float(Positions[i*2+1])/float(MAX_Y/2));        
+     { temp_color = colorSlope(c_top,c_bottom,float(Positions[i*2+1])/float(MAX_Y));
        strip.setPixelColor(i,temp_color); }
      
    strip.show();     
