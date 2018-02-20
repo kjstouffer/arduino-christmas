@@ -51,6 +51,8 @@ uint32_t magenta = strip.Color(MAX,0,MAX);
 uint32_t white = strip.Color(MAX,MAX,MAX);
 uint32_t black = strip.Color(0,0,0);
 uint32_t silver = strip.Color(MAX-10,MAX-10,MAX);
+uint32_t pink = strip.Color(MAX,MAX/2,MAX/2);
+
 
 //Define the X,Y positions of each pixel.  The first array element is the X 
 //coordinate of the first LED in the string, the second array element is the
@@ -90,8 +92,8 @@ void setup() {
 }
 
 void loop() {
-    defaultLoop();
-    //testLoop();
+    //defaultLoop();
+    testLoop();
     //initLoop();
 }
 
@@ -104,7 +106,7 @@ void initLoop(){
 }
 void testLoop() {
      Serial.println("verticalTransitionWave");
-     verticalTransitionWave(blue, green, 100, 20000);
+     verticalTransitionWave(red, pink, 100, 200000);
      //verticalTransitionWave(red, green, 10, 20000);
      //verticalTransitionWave(red, blue, 1000, 20000);
 }
@@ -463,7 +465,7 @@ void verticalTransitionWave(uint32_t c_top, uint32_t c_bottom, uint32_t tick, ui
             float y_coord = float(Positions[i*2+1]) - offset;
            	float percent = abs(y_coord/float(MAX_Y/2));
             if(percent > 1) {
-                percent = 1 - percent;
+                percent = 2 - percent;
             }
             temp_color = colorSlope(c_bottom, c_top, percent);        
             strip.setPixelColor(i,temp_color);
