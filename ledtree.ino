@@ -7,7 +7,7 @@
 #define LED_COUNT 200
 
 #define MAX 255
-#define BRIGHTNESS 80
+#define BRIGHTNESS 40
 
 #define LONG_WAIT 180000
 #define SHORT_WAIT 30000
@@ -46,20 +46,22 @@ uint32_t red = strip.Color(MAX,0,0);
 uint32_t green = strip.Color(0,MAX,0);
 uint32_t blue = strip.Color(0,0,MAX);
 uint32_t cyan = strip.Color(0,MAX,MAX);
-uint32_t yellow = strip.Color(MAX,MAX,0);
+uint32_t yellow = strip.Color(MAX,5*MAX/8,0);
 uint32_t magenta = strip.Color(MAX,0,MAX);
 uint32_t white = strip.Color(MAX,MAX,MAX);
 uint32_t black = strip.Color(0,0,0);
 uint32_t silver = strip.Color(MAX-10,MAX-10,MAX);
 uint32_t pink = strip.Color(MAX,MAX/2,MAX/2);
+uint32_t purple = strip.Color(MAX/2,0,MAX/2);
+uint32_t orange = strip.Color(MAX,MAX/3,0);
 
 
-//Define the X,Y positions of each pixel.  The first array element is the X 
+//Define the X,Y positions of each pixel.  The first array element is the X
 //coordinate of the first LED in the string, the second array element is the
 //Y coordinate of the first LED.   The third array element is the X position of
 //the second LED, etc...
 byte Positions[LED_COUNT*2] =
-{        
+{
 15,1,   15,2,   14,3,   14,4,   14,4,   15,4,   16,5,   20,9,   17,11,  19,14,  // 0 - 9
 16,18,  16,18,  24,17,  25,16,  25,16,  27,13,  30,11,  31,12,  31,12,  31,12,  //10 - 19
 28,11,  30,8,   28,9,   28,14,  28,14,  27,14,  30,10,  28,8,   20,8,   22,6,   //20 - 29
@@ -92,7 +94,7 @@ void setup() {
 }
 
 void loop() {
-    //defaultLoop();
+    // defaultLoop();
     testLoop();
     //initLoop();
 }
@@ -105,14 +107,35 @@ void initLoop(){
     getLocations(strip.Color(255, 255, 255));
 }
 void testLoop() {
-     Serial.println("verticalTransitionWave");
-     verticalTransitionWave(red, pink, 100, 200000);
-     //verticalTransitionWave(red, green, 10, 20000);
-     //verticalTransitionWave(red, blue, 1000, 20000);
+  /* Serial.println("verticalTransitionWave"); */
+  /* rainbowTransition(green, red, blue); */
+  /* delay(SHORT_TRANS); */
+  rainbowWave(red, green, blue, 100, 200000);
+  /* solid(red); */
+  /* delay(SHORT_TRANS); */
+  /* solid(orange); */
+  /* delay(SHORT_TRANS); */
+  /* solid(yellow); */
+  /* delay(SHORT_TRANS); */
+  /* solid(green); */
+  /* delay(SHORT_TRANS); */
+  /* solid(blue); */
+  /* delay(SHORT_TRANS); */
+  /* solid(purple); */
+  /* delay(SHORT_TRANS); */
+  /* transitionFade(red, green, blue, 100, 1000); */
+  /* transitionFade(blue, red, green, 100, 1000); */
+  /* transitionFade(green, blue, red, 100, 1000); */
+  // rainbow();
+  /* delay(SHORT_TRANS); */
+  // delay(LONG_WAIT);
+  /* verticalTransitionWave(red, silver, 100, 200000); */
+  // verticalTransitionWave(blue, green, 100, 20000);
+  //verticalTransitionWave(red, blue, 1000, 20000);
 }
 
 void defaultLoop() {
-  
+
 
      Serial.println("Solid");
      solid(red);
@@ -142,57 +165,57 @@ void defaultLoop() {
      firstHalfDissolve(green,SHORT_TRANS);
      secondHalfDissolve(green,SHORT_TRANS);
      delay(SHORT_WAIT);
-    
+
 ////     Serial.println("Solid2");
-////     two_solid(red,green); 
+////     two_solid(red,green);
 ////     delay(10000);
-////    
+////
 ////     Serial.println("Dissolve");
 ////     dissolve(red, green,10000);
 ////     delay(3000);
-    
+
      Serial.println("Fade");
      fade(green, blue,LONG_TRANS);
      delay(SHORT_WAIT);
-    
+
 ////     Serial.println("HorizWipe");
 ////     horizWipe(false,strip.Color(0,255,255),strip.Color(0,0,255),5000);
 ////     delay(3000);
-////    
+////
 ////     Serial.println("centerHorizWipe");
 ////     centerHorizWipe(strip.Color(0,255,0),strip.Color(255,0,0),5000);
 ////     delay(3000);
-////    
+////
 ////     Serial.println("vertWipe");
 ////     vertWipe(false,strip.Color(255,0,0),strip.Color(0,0,255),5000);
 ////     delay(3000);
-////        
+////
 ////     Serial.println("vertLine");
 ////     vertLine(false,strip.Color(0,255,0),strip.Color(255,0,0),5000);
 ////     delay(3000);
-    
+
      Serial.println("transition");
      transition(blue, green);
      delay(SHORT_WAIT);
-     
+
      Serial.println("verticalTransitionWave");
      verticalTransitionWave(blue,green,100,EXTRA_LONG_TRANS);
-     
+
      Serial.println("verticalTransitionWave");
      verticalTransitionWave(red,green,100,EXTRA_LONG_TRANS);
-    
+
 ////     Serial.println("vertCenterWave");
-////     vertCenterWave(strip.Color(255,255,0),strip.Color(0,255,255),150,5000); 
+////     vertCenterWave(strip.Color(255,255,0),strip.Color(0,255,255),150,5000);
 ////     delay(3000);
 
      Serial.println("fade");
      fadeFromExisting(red, LONG_TRANS);
      delay(SHORT_WAIT);
-    
+
 ////     Serial.println("setBlock");
 ////     setBlock(3,strip.Color(255,255,255));
 ////     delay(3000);
-    
+
     Serial.println("Shimmer");
     shimmer(red, green,EXTRA_LONG_TRANS,25);
     fadeFromExisting(green, LONG_TRANS);
@@ -200,12 +223,118 @@ void defaultLoop() {
     fadeFromExisting(red, LONG_TRANS);
 
 }
+// Transition of colors
+void rainbowTransition(uint32_t c_top, uint32_t c_middle, uint32_t c_bottom)
+{
+  uint32_t elapsed_time = 0;
+  uint32_t temp_color;
+
+  for(uint16_t i=0; i<strip.numPixels(); i++) {
+    float pos = float(Positions[i*2+1]);
+    if(pos < MAX_Y / 2){
+      temp_color = colorSlope(c_top,c_middle,pos/float(MAX_Y/2));
+    } else {
+      temp_color = colorSlope(c_middle,c_bottom,(pos - MAX_Y/2)/float(MAX_Y/2));
+    }
+    strip.setPixelColor(i,temp_color);
+  }
+
+  strip.show();
+  delay(50);
+
+} //Transition of colors
+
+void rainbowWave(uint32_t top,uint32_t middle,uint32_t bottom, uint32_t tick, uint32_t duration)
+{
+  //here we want 1/6 of the tree to be each part of the wave. basically a copy of verticalTransitionWave
+  uint32_t elapsed_time = 0;
+  uint32_t temp_color;
+  float offset = 0;
+  float y_coord;
+  float position;
+  float percent;
+  float denominator = float(MAX_Y)/3;
+  while (elapsed_time < duration)
+    {
+      for(uint16_t i=0; i<strip.numPixels(); i++){
+        //this needs to be split into X sections, where X is the number of colors
+        if(offset > MAX_Y) offset = 0;
+        position = float(Positions[i*2+1]);
+          //percent should be based on position, not y_coord
+          //that way, there won't be any funny negative math
+          //and the actual light being lit will still change colors
+          //every cycle
+        y_coord = position - offset;
+        percent = abs(y_coord/float(MAX_Y/3));
+        /* if(percent > 1) { */
+        /*   percent = 2 - percent; */
+        /* } */
+        //we need to only use three colors so the slope is gradual
+
+        percent = (y_coord /3) / denominator;
+
+        if( y_coord < -2*denominator){
+          temp_color = colorSlope(bottom, middle, percent);
+          strip.setPixelColor(i,temp_color);
+        }
+        else if( y_coord < -denominator){
+          temp_color = colorSlope(middle, top, percent);
+          strip.setPixelColor(i,temp_color);
+        }
+        else if( y_coord < 0){
+          temp_color = colorSlope(top, bottom, percent);
+          strip.setPixelColor(i,temp_color);
+        }
+        else if( y_coord < denominator){
+          temp_color = colorSlope(bottom, middle, percent);
+          strip.setPixelColor(i,temp_color);
+        }
+        else if( y_coord < 2*denominator){
+          temp_color = colorSlope(middle, top, percent);
+          strip.setPixelColor(i,temp_color);
+        }
+        else if( y_coord < MAX_Y){
+          temp_color = colorSlope(top, bottom, percent);
+          strip.setPixelColor(i,temp_color);
+        }
+      }
+      offset += 1 ;
+      strip.show();
+      delay(tick);
+      elapsed_time += tick + 5;
+    }
+}
+
+uint32_t rainbow()
+{
+  for(uint16_t i=0; i<strip.numPixels(); i++){
+    if (i % 6 == 0){
+      strip.setPixelColor(i,red);
+    } else if (i % 6 == 1){
+      strip.setPixelColor(i,orange);
+    } else if (i % 6 == 2){
+      strip.setPixelColor(i,yellow);
+    } else if (i % 6 == 3){
+      strip.setPixelColor(i,green);
+    } else if (i % 6 == 4){
+      strip.setPixelColor(i,blue);
+    } else if (i % 6 == 5){
+      strip.setPixelColor(i,purple);
+    }
+  }
+  strip.show();
+}
+
+uint32_t rainbowTwinkle()
+{
+
+}
 
 /*******************************************************/
 uint32_t colorSlope(uint32_t c1, uint32_t c2, float percent)
 {
   uint32_t temp_color, temp_c1_component, temp_c2_component;
-  
+
      temp_color = 0;
      temp_c1_component = (c1 & 0x00ff0000) >> 16;
      temp_c2_component = (c2 & 0x00ff0000) >> 16;
@@ -216,11 +345,11 @@ uint32_t colorSlope(uint32_t c1, uint32_t c2, float percent)
      temp_c2_component = (c2 & 0x0000ff00) >> 8;
      temp_color += uint32_t(temp_c1_component + (float(temp_c2_component) - float(temp_c1_component)) * percent);
      temp_color = temp_color << 8;
-     
+
      temp_c1_component = (c1 & 0x000000ff);
      temp_c2_component = (c2 & 0x000000ff);
      temp_color += uint32_t(temp_c1_component + (float(temp_c2_component) - float(temp_c1_component)) * percent);
-  
+
   return temp_color;
 }
 /*******************************************************/
@@ -228,8 +357,8 @@ void solid(uint32_t color)
 {
   for(uint16_t i=0; i<strip.numPixels(); i++)
   { strip.setPixelColor(i,color); }
-     
-  strip.show();    
+
+  strip.show();
 }
 /*******************************************************/
 void two_solid(uint32_t color_1, uint32_t color_2)
@@ -237,11 +366,11 @@ void two_solid(uint32_t color_1, uint32_t color_2)
   for(uint16_t i=0; i<strip.numPixels(); i++)
   { if (i % 2 == 0)
       {strip.setPixelColor(i,color_1);}
-    else  
-      {strip.setPixelColor(i,color_2);}    
+    else
+      {strip.setPixelColor(i,color_2);}
   }
-     
-  strip.show();    
+
+  strip.show();
 }
 /*******************************************************/
 void dissolve(uint32_t c_from, uint32_t c_to, uint32_t duration)
@@ -250,12 +379,12 @@ void dissolve(uint32_t c_from, uint32_t c_to, uint32_t duration)
    uint32_t tick = duration/(strip.numPixels()+50);
    bool temp[strip.numPixels()];
    int  rand;
-   
+
    for(uint16_t j=0; j<strip.numPixels(); j++)
    { temp[j] = false;
      strip.setPixelColor(j,c_from);
    }
-   
+
    while (elapsed_time < duration)
    {
      rand = random(strip.numPixels());
@@ -269,16 +398,16 @@ void dissolve(uint32_t c_from, uint32_t c_to, uint32_t duration)
      }
      temp[rand] = true;
      strip.setPixelColor(rand,c_to);
-     strip.show();     
-     delay(tick); 
-     
-     elapsed_time += tick+5;     
+     strip.show();
+     delay(tick);
+
+     elapsed_time += tick+5;
    }
-   
+
    for(uint16_t j=0; j<strip.numPixels(); j++)
    { strip.setPixelColor(j,c_to);}
    strip.show();
-      
+
 } //dissolve
 
 
@@ -290,48 +419,48 @@ void firstHalfDissolve(uint32_t c_to, uint32_t duration)
    uint32_t tick = duration/(strip.numPixels()/2);
    bool temp[strip.numPixels()];
    int  rand;
-   
-   
+
+
    for(uint16_t j=0; j< strip.numPixels(); j++){
       if(j%2 == 1){
         temp[j] = true;
       }else{
-        temp[j] = false;    
-      }    
+        temp[j] = false;
+      }
    }
-   
+
    while (elapsed_time < duration)
    {
      rand = abs(random(strip.numPixels() /2 ) * 2);
-     if (temp[rand]){ 
+     if (temp[rand]){
        rand = abs(random(strip.numPixels() /2 ) * 2);
        if (temp[rand]){
          for(uint16_t i=0; i<strip.numPixels(); i+=2){
             if (!temp[i]) {
-              rand=i; 
+              rand=i;
               break;
-            } 
+            }
          }
        }
      }
      temp[rand] = true;
      strip.setPixelColor(rand,c_to);
-     strip.show();     
-     delay(tick); 
-     
+     strip.show();
+     delay(tick);
+
      elapsed_time += tick;
    }
-   
+
 
   for(uint16_t j=0; j<strip.numPixels(); j++){
     if(temp[j] == false){
       strip.setPixelColor(j,c_to);
       temp[j] = true;
       strip.show();
-      delay(tick); 
+      delay(tick);
     }
   }
-      
+
 } //dissolve
 
 /*******************************************************/
@@ -346,42 +475,42 @@ void secondHalfDissolve(uint32_t c_to, uint32_t duration)
       if(j%2 == 0){
         temp[j] = true;
       }else{
-        temp[j] = false;    
-      }    
+        temp[j] = false;
+      }
    }
 
-   
+
    while (elapsed_time < duration)
    {
      rand = abs(random(strip.numPixels() /2 ) * 2) +1;
-     if (temp[rand]){ 
+     if (temp[rand]){
        rand = abs(random(strip.numPixels() /2 ) * 2) +1;
        if (temp[rand]){
          for(uint16_t i=1; i<strip.numPixels(); i+=2){
             if (!temp[i]) {
-              rand=i; 
+              rand=i;
               break;
-            } 
+            }
          }
        }
      }
      temp[rand] = true;
      strip.setPixelColor(rand,c_to);
-     strip.show();     
-     delay(tick); 
-     
+     strip.show();
+     delay(tick);
+
      elapsed_time += tick;
    }
-   
+
   for(uint16_t j=0; j<strip.numPixels(); j++){
     if(temp[j] == false){
       strip.setPixelColor(j,c_to);
       temp[j] = true;
       strip.show();
-      delay(tick); 
+      delay(tick);
     }
   }
-      
+
 } //dissolve
 
 /*******************************************************/
@@ -390,24 +519,54 @@ void fade(uint32_t c_from, uint32_t c_to, uint32_t duration)
 {
    uint32_t elapsed_time = 0;
    uint32_t temp_color;
-   
- 
-   while (elapsed_time < duration) 
+
+
+   while (elapsed_time < duration)
    {
      temp_color = colorSlope(c_from,c_to,float(elapsed_time)/float(duration));
 
      for(uint16_t i=0; i<strip.numPixels(); i++)
      { strip.setPixelColor(i,temp_color); }
-     
-     strip.show();     
-     delay(50); 
+
+     strip.show();
+     delay(50);
      elapsed_time += 55;
-     
+
    }
    for(uint16_t i=0; i<strip.numPixels(); i++)
      { strip.setPixelColor(i,c_to); }
    strip.show();
-      
+
+} //fade
+/***********************************************************/
+// Transition all lights from existing color to color c_to
+void transitionFade(uint32_t top, uint32_t middle, uint32_t bottom, uint32_t tick, uint32_t duration)
+{
+  uint32_t elapsed_time = 0;
+  uint32_t temp_color;
+
+  uint32_t next_color;
+  uint32_t pos;
+
+  while (elapsed_time < duration)
+    {
+      for(uint16_t i=0; i<strip.numPixels(); i++){
+        pos = float(Positions[i*2+1]);
+        if(pos < MAX_Y / 2){
+          next_color = colorSlope(top,middle,pos/float(MAX_Y/2));
+        } else {
+          next_color = colorSlope(middle,bottom,(pos - MAX_Y/2)/float(MAX_Y/2));
+        }
+        temp_color = colorSlope(strip.getPixelColor(i),next_color,float(elapsed_time)/float(duration));
+        strip.setPixelColor(i,temp_color);
+      }
+
+      strip.show();
+      /* delay(tick); */
+      elapsed_time += tick + 5;
+
+    }
+
 } //fade
 /***********************************************************/
 // Transition all lights from existing color to color c_to
@@ -415,26 +574,26 @@ void fadeFromExisting(uint32_t c_to, uint32_t duration)
 {
    uint32_t elapsed_time = 0;
    uint32_t temp_color;
-   
- 
-   while (elapsed_time < duration) 
+
+
+   while (elapsed_time < duration)
    {
-     
+
 
      for(uint16_t i=0; i<strip.numPixels(); i++){
         temp_color = colorSlope(strip.getPixelColor(i),c_to,float(elapsed_time)/float(duration));
-        strip.setPixelColor(i,temp_color); 
+        strip.setPixelColor(i,temp_color);
      }
-     
-     strip.show();     
-     delay(50); 
+
+     strip.show();
+     delay(50);
      elapsed_time += 55;
-     
+
    }
    for(uint16_t i=0; i<strip.numPixels(); i++)
      { strip.setPixelColor(i,c_to); }
    strip.show();
-      
+
 } //fade
 /***********************************************************/
 // Transition of colors
@@ -442,14 +601,15 @@ void transition(uint32_t c_top, uint32_t c_bottom)
 {
    uint32_t elapsed_time = 0;
    uint32_t temp_color;
-   
-   for(uint16_t i=0; i<strip.numPixels(); i++)
-     { temp_color = colorSlope(c_top,c_bottom,float(Positions[i*2+1])/float(MAX_Y));
-       strip.setPixelColor(i,temp_color); }
-     
-   strip.show();     
-   delay(50); 
-      
+
+   for(uint16_t i=0; i<strip.numPixels(); i++) {
+     temp_color = colorSlope(c_top,c_bottom,float(Positions[i*2+1])/float(MAX_Y));
+     strip.setPixelColor(i,temp_color);
+   }
+
+   strip.show();
+   delay(50);
+
 } //Transition of colors
 /***********************************************************/
 // verticalTransitionWave of colors
@@ -460,21 +620,21 @@ void verticalTransitionWave(uint32_t c_top, uint32_t c_bottom, uint32_t tick, ui
     float offset = 0;
     while (elapsed_time < duration)
     {
-        for(uint16_t i=0; i<strip.numPixels(); i++){ 
+        for(uint16_t i=0; i<strip.numPixels(); i++){
             if(offset > MAX_Y) offset = 0;
             float y_coord = float(Positions[i*2+1]) - offset;
            	float percent = abs(y_coord/float(MAX_Y/2));
             if(percent > 1) {
                 percent = 2 - percent;
             }
-            temp_color = colorSlope(c_bottom, c_top, percent);        
+            temp_color = colorSlope(c_bottom, c_top, percent);
             strip.setPixelColor(i,temp_color);
         }
         offset += 1 ;
-        strip.show();     
-        delay(tick); 
-        elapsed_time += tick + 5;     
-    }      
+        strip.show();
+        delay(tick);
+        elapsed_time += tick + 5;
+    }
 } //verticalTransitionWave of colors
 /***********************************************************/
 // Horiz Wipe from color c_from to color c_to
@@ -482,28 +642,28 @@ void horizWipe(boolean left_to_right, uint32_t c_wipe, uint32_t c_orig, uint32_t
 {
    uint32_t elapsed_time = 0;
    uint32_t X_temp;
-   
- 
-   while (elapsed_time < duration) 
+
+
+   while (elapsed_time < duration)
    {
      //Locate the wipe X
      X_temp = (uint32_t)(float(elapsed_time)/float(duration)*float(MAX_X));
-      
-    
+
+
      for(uint16_t i=0; i<strip.numPixels(); i++)
-     { if (left_to_right) 
+     { if (left_to_right)
           {if (Positions[i*2] < X_temp ) {strip.setPixelColor(i,c_wipe); } else {strip.setPixelColor(i,c_orig);   }}
        else
-          {if (Positions[i*2] > MAX_X - X_temp ) {strip.setPixelColor(i,c_wipe); } else {strip.setPixelColor(i,c_orig);   }}       
+          {if (Positions[i*2] > MAX_X - X_temp ) {strip.setPixelColor(i,c_wipe); } else {strip.setPixelColor(i,c_orig);   }}
      }
-     strip.show();     
-     delay(50); 
-     elapsed_time += 55;     
+     strip.show();
+     delay(50);
+     elapsed_time += 55;
    }
    for(uint16_t i=0; i<strip.numPixels(); i++)
      { strip.setPixelColor(i,c_wipe); }
    strip.show();
-   
+
 } //horizWipe
 /***********************************************************/
 // Horiz Wipe from color c_from to color c_to
@@ -511,23 +671,23 @@ void centerHorizWipe(uint32_t c_wipe, uint32_t c_orig, uint32_t duration)
 {
    uint32_t elapsed_time = 0;
    uint32_t X_Lower,X_Upper;
-   
- 
-   while (elapsed_time < duration) 
+
+
+   while (elapsed_time < duration)
    {
      //Locate the wipe X
      X_Lower = (uint32_t)(float(MAX_X/2) - float(elapsed_time)/float(duration)*float(MAX_X)/2);
-     X_Upper = (uint32_t)(float(MAX_X/2) + float(elapsed_time)/float(duration)*float(MAX_X)/2); 
-    
+     X_Upper = (uint32_t)(float(MAX_X/2) + float(elapsed_time)/float(duration)*float(MAX_X)/2);
+
      for(uint16_t i=0; i<strip.numPixels(); i++)
      { if (Positions[i*2] >= X_Lower && Positions[i*2] <= X_Upper )
-           {strip.setPixelColor(i,c_wipe); } 
-       else 
+           {strip.setPixelColor(i,c_wipe); }
+       else
            {strip.setPixelColor(i,c_orig);   }
      }
-     strip.show();     
-     delay(50); 
-     elapsed_time += 55;     
+     strip.show();
+     delay(50);
+     elapsed_time += 55;
    }
    for(uint16_t i=0; i<strip.numPixels(); i++)
      { strip.setPixelColor(i,c_wipe); }
@@ -539,28 +699,28 @@ void vertWipe(boolean bottom_to_top, uint32_t c_wipe, uint32_t c_orig, uint32_t 
 {
    uint32_t elapsed_time = 0;
    uint32_t Y_temp;
-   
- 
-   while (elapsed_time < duration) 
+
+
+   while (elapsed_time < duration)
    {
      //Locate the wipe Y
      Y_temp = (uint32_t)(float(elapsed_time)/float(duration)*float(MAX_Y));
-      
-    
+
+
      for(uint16_t i=0; i<strip.numPixels(); i++)
-     { if (bottom_to_top) 
+     { if (bottom_to_top)
           {if (Positions[i*2+1] < Y_temp ) {strip.setPixelColor(i,c_wipe); } else {strip.setPixelColor(i,c_orig);   }}
        else
-          {if (Positions[i*2+1] > MAX_Y - Y_temp ) {strip.setPixelColor(i,c_wipe); } else {strip.setPixelColor(i,c_orig);   }}       
+          {if (Positions[i*2+1] > MAX_Y - Y_temp ) {strip.setPixelColor(i,c_wipe); } else {strip.setPixelColor(i,c_orig);   }}
      }
-     strip.show();     
-     delay(50); 
-     elapsed_time += 55;     
+     strip.show();
+     delay(50);
+     elapsed_time += 55;
    }
    for(uint16_t i=0; i<strip.numPixels(); i++)
      { strip.setPixelColor(i,c_wipe); }
    strip.show();
-      
+
 } //vertWipe
 /*******************************************************/
 // Vert Line across from color c_from to color c_to
@@ -568,23 +728,23 @@ void vertLine(boolean bottom_to_top, uint32_t c_wipe, uint32_t c_orig, uint32_t 
 {
    uint32_t elapsed_time = 0;
    uint32_t Y_temp;
-   
- 
-   while (elapsed_time < duration) 
+
+
+   while (elapsed_time < duration)
    {
      //Locate the wipe Y
      Y_temp = (uint32_t)(float(elapsed_time)/float(duration)*float(MAX_Y));
-      
-    
+
+
      for(uint16_t i=0; i<strip.numPixels(); i++)
-     { if (bottom_to_top) 
+     { if (bottom_to_top)
           {if (Positions[i*2+1] == Y_temp | Positions[i*2+1] == Y_temp+1) {strip.setPixelColor(i,c_wipe); } else {strip.setPixelColor(i,c_orig);   }}
        else
-          {if (Positions[i*2+1] == MAX_Y - Y_temp | Positions[i*2+1] == MAX_Y - Y_temp+1 ) {strip.setPixelColor(i,c_wipe); } else {strip.setPixelColor(i,c_orig);   }}       
+          {if (Positions[i*2+1] == MAX_Y - Y_temp | Positions[i*2+1] == MAX_Y - Y_temp+1 ) {strip.setPixelColor(i,c_wipe); } else {strip.setPixelColor(i,c_orig);   }}
      }
-     strip.show();     
-     delay(50); 
-     elapsed_time += 55;     
+     strip.show();
+     delay(50);
+     elapsed_time += 55;
    }
 } //vertWipe
 /********************************************************/
@@ -596,17 +756,17 @@ void vertWave(uint32_t c1, uint32_t c2, uint32_t tick, uint32_t duration)
    {
      for(uint16_t i=0; i < LED_COUNT; i++)
      {
-       if ((Positions[i*2+1] / 4) % 4 == ticker % 4) 
+       if ((Positions[i*2+1] / 4) % 4 == ticker % 4)
           {strip.setPixelColor(i, c1);}
        else
           {strip.setPixelColor(i, c2);}
      }
-     strip.show();     
+     strip.show();
      delay(tick);
      ticker++;
      elapsed_time += tick + 5;
-   }  
-} 
+   }
+}
 /********************************************************/
 void vertCenterWave(uint32_t c1, uint32_t c2, uint32_t tick, uint32_t duration)
 {
@@ -616,30 +776,30 @@ void vertCenterWave(uint32_t c1, uint32_t c2, uint32_t tick, uint32_t duration)
    {
      for(uint16_t i=0; i < LED_COUNT; i++)
      {
-       if (((abs(MAX_Y/2 - Positions[i*2+1]) / 3) % 3 == ticker % 3)) 
+       if (((abs(MAX_Y/2 - Positions[i*2+1]) / 3) % 3 == ticker % 3))
           {strip.setPixelColor(i, c1);}
        else
           {strip.setPixelColor(i, c2);}
      }
-     strip.show();     
+     strip.show();
      delay(tick);
      ticker++;
      elapsed_time += tick + 5;
-   }  
-} 
+   }
+}
 /********************************************************/
 void setBlock(uint32_t block, uint32_t c)
 {
   uint32_t y_pos;
-  
+
   for(uint16_t i=0; i<strip.numPixels();i++) {
-    y_pos = Positions[i*2+1];    
+    y_pos = Positions[i*2+1];
       if (y_pos/(MAX_Y/6) == block)
-        { strip.setPixelColor(i,c); } 
+        { strip.setPixelColor(i,c); }
     }
-    
+
   strip.show();
-  
+
 }
 /********************************************************/
 void shimmer(uint32_t c_base, uint32_t c_shimmer, uint32_t duration, uint32_t amount)
@@ -652,8 +812,8 @@ void shimmer(uint32_t c_base, uint32_t c_shimmer, uint32_t duration, uint32_t am
    { shimmer_pixel_num[i] = 0; }
 
    for(uint16_t i=0; i < strip.numPixels(); i++)
-   { strip.setPixelColor(i,c_base);   }  
-   
+   { strip.setPixelColor(i,c_base);   }
+
    while (elapsed_time < duration)
    {
      // See if we should start a shimmer
@@ -671,26 +831,26 @@ void shimmer(uint32_t c_base, uint32_t c_shimmer, uint32_t duration, uint32_t am
          { shimmer_pixel_percent[i] += 0.04; }
          if (shimmer_pixel_percent[i] >= 2.0)
          {
-           strip.setPixelColor(shimmer_pixel_num[i],c_base);           
-           shimmer_pixel_num[i] = 0; 
+           strip.setPixelColor(shimmer_pixel_num[i],c_base);
+           shimmer_pixel_num[i] = 0;
          }
          else
-         {           
-           strip.setPixelColor(shimmer_pixel_num[i],colorSlope(c_shimmer,c_base,abs(1.0 - shimmer_pixel_percent[i])));           
+         {
+           strip.setPixelColor(shimmer_pixel_num[i],colorSlope(c_shimmer,c_base,abs(1.0 - shimmer_pixel_percent[i])));
          }
-       } 
+       }
      }
-     
+
      strip.show();
      delay(50);
      elapsed_time += 50 + 5 ;
-   }  
-   
+   }
+
    for(uint16_t i=0; i < strip.numPixels(); i++)
-   { strip.setPixelColor(i,c_base);   }  
+   { strip.setPixelColor(i,c_base);   }
    strip.show();
 
- 
+
 }
 
 void initialize(uint32_t color){
@@ -725,4 +885,3 @@ void getLocations(uint32_t c) {
     }
   }
 }
-
