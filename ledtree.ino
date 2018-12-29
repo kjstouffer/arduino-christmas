@@ -110,7 +110,8 @@ void testLoop() {
   /* Serial.println("verticalTransitionWave"); */
   /* rainbowTransition(green, red, blue); */
   /* delay(SHORT_TRANS); */
-  rainbowWave(red, green, blue, 100, 200000);
+  /* rainbowWave(red, green, blue, 100, 200000); */
+  rainbowTwinkle(500, 10000);
   /* solid(red); */
   /* delay(SHORT_TRANS); */
   /* solid(orange); */
@@ -313,9 +314,32 @@ uint32_t rainbow()
   strip.show();
 }
 
-uint32_t rainbowTwinkle()
+uint32_t rainbowTwinkle(uint32_t tick, uint32_t duration)
 {
-
+  uint32_t offset = 0;
+  uint32_t elapsed_time = 0;
+  while(duration > elapsed_time){
+    for(uint32_t i=0; i<strip.numPixels(); i++){
+      uint32_t decision = (offset + i) % 6;
+      if (decision == 0){
+        strip.setPixelColor(i,red);
+      } else if (decision == 1){
+        strip.setPixelColor(i,orange);
+      } else if (decision == 2){
+        strip.setPixelColor(i,yellow);
+      } else if (decision == 3){
+        strip.setPixelColor(i,green);
+      } else if (decision == 4){
+        strip.setPixelColor(i,blue);
+      } else if (decision == 5){
+        strip.setPixelColor(i,purple);
+      }
+    }
+    offset++;
+    delay(tick);
+    strip.show();
+    elapsed_time += tick + 5;
+  }
 }
 
 /*******************************************************/
