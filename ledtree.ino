@@ -126,7 +126,7 @@ void testLoop() {
   /* transitionFade(red, green, blue, 100, 1000); */
   /* transitionFade(blue, red, green, 100, 1000); */
   /* transitionFade(green, blue, red, 100, 1000); */
-  // rainbow();
+  /* rainbow(); */
   /* delay(SHORT_TRANS); */
   // delay(LONG_WAIT);
   /* verticalTransitionWave(red, silver, 100, 200000); */
@@ -246,57 +246,45 @@ void rainbowTransition(uint32_t c_top, uint32_t c_middle, uint32_t c_bottom)
 
 void rainbowWave(uint32_t top,uint32_t middle,uint32_t bottom, uint32_t tick, uint32_t duration)
 {
-  //here we want 1/6 of the tree to be each part of the wave. basically a copy of verticalTransitionWave
   uint32_t elapsed_time = 0;
   uint32_t temp_color;
   float offset = 0;
+
+  float multiplier = float(3);
+  float max = float(MAX_Y);
+  float denominator = max / multiplier;
   float y_coord;
-  float position;
   float percent;
-  float denominator = float(MAX_Y)/3;
   while (elapsed_time < duration)
     {
       for(uint16_t i=0; i<strip.numPixels(); i++){
-        //this needs to be split into X sections, where X is the number of colors
         if(offset > MAX_Y) offset = 0;
-        position = float(Positions[i*2+1]);
-          //percent should be based on position, not y_coord
-          //that way, there won't be any funny negative math
-          //and the actual light being lit will still change colors
-          //every cycle
-        y_coord = position - offset;
-        percent = abs(y_coord/float(MAX_Y/3));
-        /* if(percent > 1) { */
-        /*   percent = 2 - percent; */
-        /* } */
-        //we need to only use three colors so the slope is gradual
+        // we want y_coord to wrap around to the top, so when y_coord is less than zero,
+        // we need to add MAX_Y to it, that way we don't deal with silly abs()ing stuff
+        // and percent will never be greater than 1
 
-        percent = (y_coord /3) / denominator;
+        y_coord = float(Positions[i*2+1]) - offset;
+        if(y_coord < 0) y_coord = y_coord + MAX_Y;
+        percent = y_coord/denominator;
 
-        if( y_coord < -2*denominator){
+        // we can generailze the percent by subtracting 1 to create a smooth
+        // transition (if percent is greater than 1)
+        if(percent > 1){
+          percent = percent - 1;
+        }
+
+        // now, in order to add colors, we can do that, except that there will be a hard-stop
+        // at the beginning and end. this means we need to add a third transition back to the first color
+        // we should be able to generalize this for the number of colors given
+        if(y_coord <= denominator) {
           temp_color = colorSlope(bottom, middle, percent);
-          strip.setPixelColor(i,temp_color);
-        }
-        else if( y_coord < -denominator){
+        } else if(y_coord <= 2 * denominator) {
           temp_color = colorSlope(middle, top, percent);
-          strip.setPixelColor(i,temp_color);
-        }
-        else if( y_coord < 0){
+        } else {
           temp_color = colorSlope(top, bottom, percent);
-          strip.setPixelColor(i,temp_color);
         }
-        else if( y_coord < denominator){
-          temp_color = colorSlope(bottom, middle, percent);
-          strip.setPixelColor(i,temp_color);
-        }
-        else if( y_coord < 2*denominator){
-          temp_color = colorSlope(middle, top, percent);
-          strip.setPixelColor(i,temp_color);
-        }
-        else if( y_coord < MAX_Y){
-          temp_color = colorSlope(top, bottom, percent);
-          strip.setPixelColor(i,temp_color);
-        }
+
+        strip.setPixelColor(i,temp_color);
       }
       offset += 1 ;
       strip.show();
