@@ -110,7 +110,10 @@ void testLoop() {
   /* Serial.println("verticalTransitionWave"); */
   /* rainbowTransition(green, red, blue); */
   /* delay(SHORT_TRANS); */
-  /* rainbowWave(red, green, blue, 100, 200000); */
+  rainbowWave(red, green, blue, 100, 10000);
+  rainbow();
+  delay(SHORT_TRANS);
+  delay(SHORT_TRANS);
   rainbowTwinkle(500, 10000);
   /* solid(red); */
   /* delay(SHORT_TRANS); */
