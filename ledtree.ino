@@ -110,7 +110,9 @@ void testLoop() {
   /* Serial.println("verticalTransitionWave"); */
   /* rainbowTransition(green, red, blue); */
   /* delay(SHORT_TRANS); */
-  rainbowWave(red, green, blue, 100, 10000);
+  uint32_t colors[] = {red, yellow, green,blue, purple};
+  uint16_t num_colors = sizeof(colors)/(sizeof(colors[0]));
+  rainbowWave(100, 100000, num_colors, colors);
   rainbow();
   delay(SHORT_TRANS);
   delay(SHORT_TRANS);
@@ -248,17 +250,20 @@ void rainbowTransition(uint32_t c_top, uint32_t c_middle, uint32_t c_bottom)
 
 } //Transition of colors
 
-void rainbowWave(uint32_t top,uint32_t middle,uint32_t bottom, uint32_t tick, uint32_t duration)
+void rainbowWave(uint32_t tick, uint32_t duration, uint16_t num_colors, uint32_t colors[])
 {
   uint32_t elapsed_time = 0;
   uint32_t temp_color;
   float offset = 0;
 
-  float multiplier = float(3);
+  float multiplier = float(num_colors);
   float max = float(MAX_Y);
   float denominator = max / multiplier;
   float y_coord;
   float percent;
+  uint32_t current;
+  uint32_t next;
+  int intpart;
   while (elapsed_time < duration)
     {
       for(uint16_t i=0; i<strip.numPixels(); i++){
@@ -271,21 +276,20 @@ void rainbowWave(uint32_t top,uint32_t middle,uint32_t bottom, uint32_t tick, ui
         if(y_coord < 0) y_coord = y_coord + MAX_Y;
         percent = y_coord/denominator;
 
-        // we can generailze the percent by subtracting 1 to create a smooth
-        // transition (if percent is greater than 1)
-        if(percent > 1){
-          percent = percent - 1;
-        }
+        // we can generailze the percent by dropping the int part of it
+        intpart = (int)percent;
+        percent = percent - intpart;
 
         // now, in order to add colors, we can do that, except that there will be a hard-stop
         // at the beginning and end. this means we need to add a third transition back to the first color
         // we should be able to generalize this for the number of colors given
-        if(y_coord <= denominator) {
-          temp_color = colorSlope(bottom, middle, percent);
-        } else if(y_coord <= 2 * denominator) {
-          temp_color = colorSlope(middle, top, percent);
-        } else {
-          temp_color = colorSlope(top, bottom, percent);
+        for(uint16_t j = 1; j <= num_colors; j++){
+          current = colors[j-1];
+          next = j < num_colors ? colors[j] : colors[0];
+          if(y_coord <= denominator * j){
+            temp_color = colorSlope(current, next, percent);
+            break;
+          }
         }
 
         strip.setPixelColor(i,temp_color);
