@@ -7,7 +7,7 @@
 #define LED_COUNT 200
 
 #define MAX 255
-#define BRIGHTNESS 40
+#define BRIGHTNESS 80
 
 #define LONG_WAIT 180000
 #define SHORT_WAIT 30000
@@ -110,13 +110,16 @@ void testLoop() {
   /* Serial.println("verticalTransitionWave"); */
   /* rainbowTransition(green, red, blue); */
   /* delay(SHORT_TRANS); */
-  uint32_t colors[] = {red, yellow, green,blue, purple};
+  /* transition(yellow, blue); */
+  /* delay(SHORT_TRANS); */
+  uint32_t colors[] = {red, yellow, green,blue, purple, red, yellow, green, blue, purple};
   uint16_t num_colors = sizeof(colors)/(sizeof(colors[0]));
   rainbowWave(100, 100000, num_colors, colors);
+  /* verticalTransitionWave(red, silver, 100, 200000); */
   rainbow();
   delay(SHORT_TRANS);
   delay(SHORT_TRANS);
-  rainbowTwinkle(500, 10000);
+  rainbowTwinkle(100, 10000);
   /* solid(red); */
   /* delay(SHORT_TRANS); */
   /* solid(orange); */
@@ -286,7 +289,7 @@ void rainbowWave(uint32_t tick, uint32_t duration, uint16_t num_colors, uint32_t
         for(uint16_t j = 1; j <= num_colors; j++){
           current = colors[j-1];
           next = j < num_colors ? colors[j] : colors[0];
-          if(y_coord <= denominator * j){
+          if(y_coord < denominator * j){
             temp_color = colorSlope(current, next, percent);
             break;
           }
