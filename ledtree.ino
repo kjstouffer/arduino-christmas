@@ -40,7 +40,7 @@ Adafruit_NeoPixel strip = Adafruit_NeoPixel(LED_COUNT, PIN, NEO_RGB + NEO_KHZ800
 //For example if MAX_X = 20, then LEDs at a position of 10 would be the middle of
 //the tree.
 #define MAX_X 36
-#define MAX_Y 56
+#define MAX_Y 64
 
 uint32_t red = strip.Color(MAX,0,0);
 uint32_t green = strip.Color(0,MAX,0);
@@ -60,28 +60,50 @@ uint32_t orange = strip.Color(MAX,MAX/3,0);
 //coordinate of the first LED in the string, the second array element is the
 //Y coordinate of the first LED.   The third array element is the X position of
 //the second LED, etc...
-byte Positions[LED_COUNT*2] =
-{
-15,1,   15,2,   14,3,   14,4,   14,4,   15,4,   16,5,   20,9,   17,11,  19,14,  // 0 - 9
-16,18,  16,18,  24,17,  25,16,  25,16,  27,13,  30,11,  31,12,  31,12,  31,12,  //10 - 19
-28,11,  30,8,   28,9,   28,14,  28,14,  27,14,  30,10,  28,8,   20,8,   22,6,   //20 - 29
-18,7,   18,6,   26,8,   24,9,   19,14,  24,14,  24,14,  27,14,  27,14,  29,15,  //30 - 39
-29,16,  30,16,  31,17,  26,17,  26,18,  26,20,  24,21,  24,22,  22,22,  24,22,  //40 - 49
-26,29,  26,24,  24,24,  28,26,  26,26,  25,26,  24,24,  24,21,  24,21,  23,18,  //50 - 59
-26,21,  21,18,  18,18,  20,24,  16,27,  18,26,  16,29,  21,28,  27,29,  27,26,  //60 - 69
-25,25,  26,24,  26,30,  25,28,  27,31,  25,31,  27,31,  19,30,  27,34,  30,34,  //70 - 79
-28,25,  25,36,  20,35,  22,34,  22,40,  23,40,  23,37,  25,35,  22,38,  23,37,  //80 - 89
-22,37,  19,35,  17,35,  14,35,  11,37,  13,40,  15,39,  18,37,  18,39,  21,38,  //90 - 99
-22,44,  18,48,  20,48,  19,50,  19,51,  18,49,  15,51,  15,51,  15,51,  13,42,  //100-109
-13,43,  15,46,  15,48,  16,48,  17,48,  19,49,  18,47,  21,49,  18,47,  16,45,  //110-119
-15,47,  13,40,  12,39,  13,39,  13,38,  13,38,  13,38,  13,38,  13,38,  22,34,  //120-129
-14,38,  14,38,  14,38,  14,38,  9,35,   13,34,  8,34,   9,33,   8,30,   13,31,  //130-139
-13,32,  13,29,  9,27,   9,26,   6,26,   6,25,   9,27,   4,24,   4,24,   6,24,   //140-149
-15,27,  16,29,  15,27,  15,29,  16,25,  15,21,  14,23,  8,16,   12,13,  9,18,   //150-159
- 8,18,  11,20,  12,20,  6,15,   6,15,   6,16,   6,16,   7,20,   8,20,   10,18,  //160-169
-14,20,  14,17,  16,19,  20,18,  17,16,  16,16,  15,12,  13,14,  8,13,   6,9,    //170-179
- 6,8,    5,9,   6,13,   4,14,   2,12,   5,15,   6,15,   5,14,   7,13,   7,12,   //180-189
- 9,9,    8,8,   8,8,    8,8,    10,8,   15,4,   15,4,   14,3,   14,2,   14,1    //190-199
+//byte Positions[LED_COUNT*2] =
+//{
+//15,1,   15,2,   14,3,   14,4,   14,4,   15,4,   16,5,   20,9,   17,11,  19,14,  // 0 - 9
+//16,18,  16,18,  24,17,  25,16,  25,16,  27,13,  30,11,  31,12,  31,12,  31,12,  //10 - 19
+//28,11,  30,8,   28,9,   28,14,  28,14,  27,14,  30,10,  28,8,   20,8,   22,6,   //20 - 29
+//18,7,   18,6,   26,8,   24,9,   19,14,  24,14,  24,14,  27,14,  27,14,  29,15,  //30 - 39
+//29,16,  30,16,  31,17,  26,17,  26,18,  26,20,  24,21,  24,22,  22,22,  24,22,  //40 - 49
+//26,29,  26,24,  24,24,  28,26,  26,26,  25,26,  24,24,  24,21,  24,21,  23,18,  //50 - 59
+//26,21,  21,18,  18,18,  20,24,  16,27,  18,26,  16,29,  21,28,  27,29,  27,26,  //60 - 69
+//25,25,  26,24,  26,30,  25,28,  27,31,  25,31,  27,31,  19,30,  27,34,  30,34,  //70 - 79
+//28,25,  25,36,  20,35,  22,34,  22,40,  23,40,  23,37,  25,35,  22,38,  23,37,  //80 - 89
+//22,37,  19,35,  17,35,  14,35,  11,37,  13,40,  15,39,  18,37,  18,39,  21,38,  //90 - 99
+//22,44,  18,48,  20,48,  19,50,  19,51,  18,49,  15,51,  15,51,  15,51,  13,42,  //100-109
+//13,43,  15,46,  15,48,  16,48,  17,48,  19,49,  18,47,  21,49,  18,47,  16,45,  //110-119
+//15,47,  13,40,  12,39,  13,39,  13,38,  13,38,  13,38,  13,38,  13,38,  22,34,  //120-129
+//14,38,  14,38,  14,38,  14,38,  9,35,   13,34,  8,34,   9,33,   8,30,   13,31,  //130-139
+//13,32,  13,29,  9,27,   9,26,   6,26,   6,25,   9,27,   4,24,   4,24,   6,24,   //140-149
+//15,27,  16,29,  15,27,  15,29,  16,25,  15,21,  14,23,  8,16,   12,13,  9,18,   //150-159
+// 8,18,  11,20,  12,20,  6,15,   6,15,   6,16,   6,16,   7,20,   8,20,   10,18,  //160-169
+//14,20,  14,17,  16,19,  20,18,  17,16,  16,16,  15,12,  13,14,  8,13,   6,9,    //170-179
+// 6,8,    5,9,   6,13,   4,14,   2,12,   5,15,   6,15,   5,14,   7,13,   7,12,   //180-189
+// 9,9,    8,8,   8,8,    8,8,    10,8,   15,4,   15,4,   14,3,   14,2,   14,1    //190-199
+//};
+byte Positions[LED_COUNT*2] = {
+0, 0, 8, 64, 11, 64, 8, 63, 8, 62, 8, 60, 7, 62, 12, 61, 5, 56, 2, 56,
+12, 61, 12, 61, 14, 61, 19, 62, 14, 50, 20, 51, 20, 50, 20, 49, 22, 49, 20, 63,
+21, 43, 23, 43, 20, 43, 21, 43, 20, 43, 20, 43, 18, 43, 16, 44, 15, 44, 12, 45,
+10, 44, 9, 44, 17, 40, 1, 44, 4, 44, 4, 45, 4, 44, 3, 40, 0, 45, 3, 43,
+3, 45, 4, 47, 2, 51, 5, 49, 8, 48, 9, 46, 10, 46, 13, 42, 10, 39, 9, 37,
+9, 34, 8, 38, 4, 40, 6, 39, 4, 39, 0, 45, 0, 44, 0, 41, 7, 39, 11, 39,
+0, 41, 14, 43, 14, 44, 17, 39, 28, 39, 19, 38, 24, 34, 21, 35, 21, 33, 26, 29,
+17, 40, 17, 32, 30, 39, 4, 33, 1, 36, 2, 38, 1, 34, 0, 39, 0, 35, 5, 32,
+7, 32, 6, 33, 6, 33, 10, 30, 11, 30, 14, 30, 17, 29, 18, 26, 15, 22, 14, 24,
+13, 25, 11, 26, 10, 27, 13, 31, 14, 31, 5, 25, 4, 31, 14, 31, 16, 30, 16, 23,
+12, 34, 25, 29, 18, 25, 31, 36, 26, 29, 7, 23, 11, 24, 10, 22, 10, 17, 11, 17,
+12, 19, 10, 22, 12, 20, 14, 18, 12, 17, 10, 16, 10, 16, 13, 14, 10, 17, 10, 17,
+12, 19, 19, 20, 11, 17, 14, 12, 16, 11, 17, 12, 13, 11, 17, 14, 18, 15, 19, 19,
+18, 20, 18, 20, 18, 20, 17, 21, 19, 19, 18, 18, 17, 18, 17, 19, 16, 19, 20, 24,
+19, 25, 22, 27, 22, 27, 24, 29, 20, 24, 26, 29, 25, 30, 24, 34, 24, 34, 23, 34,
+23, 33, 23, 32, 19, 36, 16, 35, 17, 35, 17, 36, 18, 38, 20, 42, 20, 40, 27, 43,
+27, 43, 28, 44, 27, 39, 28, 40, 27, 39, 25, 45, 32, 47, 25, 49, 30, 51, 30, 51,
+22, 46, 28, 44, 24, 47, 22, 49, 25, 49, 22, 50, 26, 49, 21, 48, 17, 47, 15, 49,
+14, 51, 14, 51, 2, 52, 7, 53, 8, 57, 10, 57, 7, 59, 5, 63, 6, 61, 3, 61,
+4, 58, 3, 58, 3, 55, 4, 51, 0, 57, 4, 57, 5, 59, 4, 63, 4, 63, 4, 64
 };
 
 
@@ -94,9 +116,14 @@ void setup() {
 }
 
 void loop() {
-    // defaultLoop();
-    testLoop();
-    //initLoop();
+  // defaultLoop();
+  //testLoop();
+  rainbowLoop();
+  //initLoop();
+}
+
+void testLoop() {
+
 }
 
 void initLoop(){
@@ -106,7 +133,7 @@ void initLoop(){
     initialize(strip.Color(255,255,255));
     getLocations(strip.Color(255, 255, 255));
 }
-void testLoop() {
+void rainbowLoop() {
   /* Serial.println("verticalTransitionWave"); */
   /* rainbowTransition(green, red, blue); */
   /* delay(SHORT_TRANS); */
@@ -114,12 +141,16 @@ void testLoop() {
   /* delay(SHORT_TRANS); */
   uint32_t colors[] = {red, yellow, green,blue, purple, red, yellow, green, blue, purple};
   uint16_t num_colors = sizeof(colors)/(sizeof(colors[0]));
-  rainbowWave(100, 100000, num_colors, colors);
+  rainbowTransition(num_colors, colors);
+  delay(LONG_TRANS);
+  rainbowWave(100, LONG_WAIT, num_colors, colors);
+  delay(SHORT_TRANS);
   /* verticalTransitionWave(red, silver, 100, 200000); */
   rainbow();
-  delay(SHORT_TRANS);
-  delay(SHORT_TRANS);
-  rainbowTwinkle(100, 10000);
+  delay(LONG_WAIT);
+  rainbowTwinkle(500, LONG_TRANS);
+  delay(LONG_TRANS);
+  rainbowShimmer(LONG_TRANS, 80, num_colors, colors);
   /* solid(red); */
   /* delay(SHORT_TRANS); */
   /* solid(orange); */
@@ -233,25 +264,75 @@ void defaultLoop() {
 
 }
 // Transition of colors
-void rainbowTransition(uint32_t c_top, uint32_t c_middle, uint32_t c_bottom)
+/* void rainbowTransition(uint32_t c_top, uint32_t c_middle, uint32_t c_bottom) */
+/* { */
+/*   uint32_t elapsed_time = 0; */
+/*   uint32_t temp_color; */
+
+/*   for(uint16_t i=0; i<strip.numPixels(); i++) { */
+/*     float pos = float(Positions[i*2+1]); */
+/*     if(pos < MAX_Y / 2){ */
+/*       temp_color = colorSlope(c_top,c_middle,pos/float(MAX_Y/2)); */
+/*     } else { */
+/*       temp_color = colorSlope(c_middle,c_bottom,(pos - MAX_Y/2)/float(MAX_Y/2)); */
+/*     } */
+/*     strip.setPixelColor(i,temp_color); */
+/*   } */
+
+/*   strip.show(); */
+/*   delay(50); */
+
+/* } //Transition of colors */
+
+
+
+void rainbowTransition(uint16_t num_colors, uint32_t colors[])
 {
   uint32_t elapsed_time = 0;
   uint32_t temp_color;
+  float offset = 0;
 
-  for(uint16_t i=0; i<strip.numPixels(); i++) {
-    float pos = float(Positions[i*2+1]);
-    if(pos < MAX_Y / 2){
-      temp_color = colorSlope(c_top,c_middle,pos/float(MAX_Y/2));
-    } else {
-      temp_color = colorSlope(c_middle,c_bottom,(pos - MAX_Y/2)/float(MAX_Y/2));
+  float multiplier = float(num_colors);
+  float max = float(MAX_Y);
+  float denominator = max / multiplier;
+  float y_coord;
+  float percent;
+  uint32_t current;
+  uint32_t next;
+  int intpart;
+
+  for(uint16_t i=0; i<strip.numPixels(); i++){
+    if(offset > MAX_Y) offset = 0;
+    // we want y_coord to wrap around to the top, so when y_coord is less than zero,
+    // we need to add MAX_Y to it, that way we don't deal with silly abs()ing stuff
+    // and percent will never be greater than 1
+
+    y_coord = float(Positions[i*2+1]) - offset;
+    if(y_coord < 0) y_coord = y_coord + MAX_Y;
+    percent = y_coord/denominator;
+
+    // we can generailze the percent by dropping the int part of it
+    intpart = (int)percent;
+    percent = percent - intpart;
+
+    // now, in order to add colors, we can do that, except that there will be a hard-stop
+    // at the beginning and end. this means we need to add a third transition back to the first color
+    // we should be able to generalize this for the number of colors given
+    for(uint16_t j = 1; j <= num_colors; j++){
+      current = colors[j-1];
+      next = j < num_colors ? colors[j] : colors[0];
+      if(y_coord < denominator * j){
+        temp_color = colorSlope(current, next, percent);
+        break;
+      }
     }
+
     strip.setPixelColor(i,temp_color);
   }
-
   strip.show();
-  delay(50);
 
-} //Transition of colors
+
+}
 
 void rainbowWave(uint32_t tick, uint32_t duration, uint16_t num_colors, uint32_t colors[])
 {
@@ -322,6 +403,80 @@ uint32_t rainbow()
     }
   }
   strip.show();
+}
+
+/********************************************************/
+void rainbowShimmer(uint32_t duration, uint32_t amount, uint16_t num_colors, uint32_t colors[] )
+{
+  //amount needs to be below 75, otherwise the arduino will run out of memory!
+  uint16_t shimmer_pixel_num[amount];
+  uint32_t shimmer_pixel_old_color[amount];
+  uint32_t shimmer_pixel_new_color[amount];
+  uint16_t shimmer_pixel_percent[amount];
+  uint32_t elapsed_time = 0;
+  uint32_t shimmer_color;
+
+  for(uint16_t i=0; i < amount; i++){
+    shimmer_pixel_num[i] = 0;
+  }
+
+  //randomize the colors
+  int previous = 0;
+  int c = random(num_colors);
+  int current;
+  for(uint16_t i=0; i < strip.numPixels(); i++){
+    current = i / num_colors;
+    if(current > previous) {
+      previous = current;
+      c = random(num_colors);
+    }
+    //chunk the random color
+    strip.setPixelColor(i,colors[c]);
+  }
+
+  while (elapsed_time < duration){
+    shimmer_color = colors[random(num_colors)];
+    for(uint16_t i=0; i < amount; i++){
+      if (shimmer_pixel_num[i] == 0 && random(10) > 6) {
+        shimmer_pixel_num[i] = random(LED_COUNT);
+        shimmer_pixel_percent[i] = 0;
+        shimmer_pixel_old_color[i] = strip.getPixelColor(shimmer_pixel_num[i]);
+        shimmer_pixel_new_color[i] = colors[random(num_colors)];
+      }
+      if (shimmer_pixel_num[i] > 0) {
+        if (i% 2 == 0) {
+          shimmer_pixel_percent[i] += 2;
+        } else {
+          shimmer_pixel_percent[i] += 4;
+        }
+        if (shimmer_pixel_percent[i] >= 200) {
+          int c = random(num_colors);
+          //when done shimmering, set to the new color
+          strip.setPixelColor(shimmer_pixel_num[i],shimmer_pixel_new_color[i]);
+          shimmer_pixel_num[i] = 0;
+        } else {
+          strip.setPixelColor(
+                              shimmer_pixel_num[i],
+                              colorSlope(
+                                         shimmer_pixel_old_color[i],
+                                         shimmer_pixel_new_color[i],
+                                         abs(1.0 - float(shimmer_pixel_percent[i])/100)
+                                         )
+                              );
+        }
+      }
+    }
+
+    strip.show();
+    delay(50);
+    elapsed_time += 50 + 5 ;
+  }
+
+  /* for(uint16_t i=0; i < strip.numPixels(); i++){ */
+  /*   strip.setPixelColor(i,c_base); */
+  /* } */
+  /* strip.show(); */
+
 }
 
 uint32_t rainbowTwinkle(uint32_t tick, uint32_t duration)
