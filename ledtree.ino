@@ -147,10 +147,11 @@ void rainbowLoop() {
   delay(SHORT_TRANS);
   /* verticalTransitionWave(red, silver, 100, 200000); */
   rainbow();
-  delay(LONG_WAIT);
+  delay(LONG_TRANS);
   rainbowTwinkle(500, LONG_TRANS);
   delay(LONG_TRANS);
-  rainbowShimmer(LONG_TRANS, 80, num_colors, colors);
+  //rainbowShimmer(LONG_TRANS, 60, num_colors, colors);
+  //delay(SHORT_TRANS);
   /* solid(red); */
   /* delay(SHORT_TRANS); */
   /* solid(orange); */
