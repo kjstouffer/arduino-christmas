@@ -116,9 +116,9 @@ void setup() {
 }
 
 void loop() {
-  // defaultLoop();
+  defaultLoop();
   //testLoop();
-  rainbowLoop();
+  //rainbowLoop();
   //initLoop();
 }
 
